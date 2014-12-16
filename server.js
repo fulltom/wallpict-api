@@ -6,19 +6,21 @@ var express    = require('express');
 var bodyParser = require('body-parser');
 var app        = express();
 var morgan     = require('morgan');
+var multer  = require('multer');
 
 //S3 part
 var AWS = require('aws-sdk');
 AWS.config.loadFromPath('./config/config.json');
-var s3 = new AWS.S3();
+
 var s3Bucket = new AWS.S3( { params: {Bucket: 'wallpictstore'} } )
 
 // configure app
 app.use(morgan('dev')); // log requests to the console
 
 // configure body parser
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(multer({ dest: './uploads/'}))
 
 var port     = process.env.PORT || 8080; // set our port
 
@@ -50,9 +52,18 @@ router.route('/item')
 	// create a bear (accessed at POST http://localhost:8080/item)
 	.post(function(req, res) {
 
-		var item = new Item();		// create a new instance of the Bear model
+		var item = new Item();		// create a new instance of the Item model
+		console.log(req.files.image);
+		// var data = {Key: req.files.image.originalname, Body: req.files.image.path};
+		// s3Bucket.putObject(data, function(err, data){
+		//     if (err)
+		//     { console.log('Error uploading data: ', data);
+		//     } else {
+		//       console.log('succesfully uploaded the image!');
+		//     }
+		// });
 
-		item.pseudo = req.body.pseudo;  // set the bears name (comes from the request)
+		item.pseudo = req.body.pseudo;  // set the items name (comes from the request)
 		item.tags = req.body.tags;
 		item.imageURI = req.body.imageURI;
 
@@ -62,8 +73,6 @@ router.route('/item')
 
 			res.json({ message: 'Item created!' });
 		});
-
-
 	})
 
 	// get all the items with pagination (accessed at GET http://localhost:8080/api/items?page=1)
