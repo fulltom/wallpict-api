@@ -29,16 +29,15 @@ var router = express.Router();
 // middleware to use for all requests
 router.use(function(req, res, next) {
 	// do logging
-	console.log('Something is happening.');
 	next();
 });
 
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 router.get('/', function(req, res) {
-	res.json({ message: 'hooray! welcome to our api!' });
+	res.json({ message: 'hooray! welcome to our api!'});
 });
 
-// on routes that end in /bears
+// on routes that end in /item
 // ----------------------------------------------------
 router.route('/item')
 
@@ -61,14 +60,24 @@ router.route('/item')
 
 	})
 
-	// get all the bears (accessed at GET http://localhost:8080/api/items)
+	// get all the items with pagination (accessed at GET http://localhost:8080/api/items?page=1)
 	.get(function(req, res) {
-		Item.find(function(err, items) {
-			if (err)
-				res.send(err);
-
-			res.json(items);
-		});
+		var page = (req.param('page') > 0 ? req.param('page') : 1) - 1;
+		var limit = req.param('limit') || 5
+	Item
+		.find()
+		.limit(limit)
+		.skip(limit * page)
+		.sort({createdAt: 'desc'})
+		.exec(function (err, items) {
+		  Item.count().exec(function (err, count) {
+		    res.json('items', {
+		        items: items
+		      , page: page
+		      , pages: Math.floor(count / limit)
+		    })
+		  })
+		})
 	});
 
 // on routes that end in /item/:item_id
@@ -94,6 +103,7 @@ router.route('/item/:item_id')
 			item.pseudo = req.body.pseudo;
 			item.tags = req.body.tags;
 			item.imageURI = req.body.imageURI;
+
 			item.save(function(err) {
 				if (err)
 					res.send(err);

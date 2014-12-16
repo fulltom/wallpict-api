@@ -14,7 +14,7 @@ var ItemSchema   = new Schema({
 	pseudo: {type : String, default : '', trim : true},
 	createdAt: { type : Date, default : Date.now },
 	tags: {type: [], get: getTags, set: setTags},
-	imageURI : String
-},{versionKey: false});
+	imageURI : {type : String, default : ''}
+});
 
 module.exports = mongoose.model('Item', ItemSchema);
