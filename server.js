@@ -42,11 +42,14 @@ router.get('/', function(req, res) {
 // ----------------------------------------------------
 router.route('/item')
 
-	// create a bear (accessed at POST http://localhost:8080/bears)
+	// create a bear (accessed at POST http://localhost:8080/item)
 	.post(function(req, res) {
 
 		var item = new Item();		// create a new instance of the Bear model
-		item.name = req.body.name;  // set the bears name (comes from the request)
+
+		item.pseudo = req.body.pseudo;  // set the bears name (comes from the request)
+		item.tags = req.body.tags;
+		item.imageURI = req.body.imageURI;
 
 		item.save(function(err) {
 			if (err)
@@ -58,7 +61,7 @@ router.route('/item')
 
 	})
 
-	// get all the bears (accessed at GET http://localhost:8080/api/bears)
+	// get all the bears (accessed at GET http://localhost:8080/api/items)
 	.get(function(req, res) {
 		Item.find(function(err, items) {
 			if (err)
@@ -68,27 +71,29 @@ router.route('/item')
 		});
 	});
 
-// on routes that end in /bears/:bear_id
+// on routes that end in /item/:item_id
 // ----------------------------------------------------
 router.route('/item/:item_id')
 
 	// get the bear with that id
 	.get(function(req, res) {
-		Item.findById(req.params.bear_id, function(err, item) {
+		Item.findById(req.params.item_id, function(err, item) {
 			if (err)
 				res.send(err);
 			res.json(item);
 		});
 	})
 
-	// update the bear with this id
+	// update the item with this id
 	.put(function(req, res) {
 		Item.findById(req.params.item_id, function(err, item) {
 
 			if (err)
 				res.send(err);
 
-			item.name = req.body.name;
+			item.pseudo = req.body.pseudo;
+			item.tags = req.body.tags;
+			item.imageURI = req.body.imageURI;
 			item.save(function(err) {
 				if (err)
 					res.send(err);
