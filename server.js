@@ -7,6 +7,12 @@ var bodyParser = require('body-parser');
 var app        = express();
 var morgan     = require('morgan');
 
+//S3 part
+var AWS = require('aws-sdk');
+AWS.config.loadFromPath('./config/config.json');
+var s3 = new AWS.S3();
+var s3Bucket = new AWS.S3( { params: {Bucket: 'wallpictstore'} } )
+
 // configure app
 app.use(morgan('dev')); // log requests to the console
 
