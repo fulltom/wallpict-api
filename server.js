@@ -11,7 +11,6 @@ var multer  = require('multer');
 //S3 part
 var AWS = require('aws-sdk');
 AWS.config.loadFromPath('./config/config.json');
-
 var s3Bucket = new AWS.S3( { params: {Bucket: 'wallpictstore'} } )
 
 // configure app
