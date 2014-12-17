@@ -7,10 +7,14 @@ var bodyParser = require('body-parser');
 var app        = express();
 var morgan     = require('morgan');
 var multer  = require('multer');
+var multiparty  = require('multiparty');
 
 //S3 part
 var AWS = require('aws-sdk');
 AWS.config.loadFromPath('./config/config.json');
+var s3 = new AWS.S3();
+var bucketParams = {Bucket: 'myBucket'};
+s3.createBucket(bucketParams)
 var s3Bucket = new AWS.S3( { params: {Bucket: 'wallpictstore'} } )
 
 // configure app
@@ -18,8 +22,8 @@ app.use(morgan('dev')); // log requests to the console
 
 // configure body parser
 // app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(multer({ dest: './uploads/'}))
+// app.use(bodyParser.json());
+// app.use(multer({ dest: './uploads/'}))
 
 var port     = process.env.PORT || 8080; // set our port
 
@@ -52,7 +56,32 @@ router.route('/item')
 	.post(function(req, res) {
 
 		var item = new Item();		// create a new instance of the Item model
-		console.log(req.files.image);
+
+		// var form = new multiparty.Form();
+	 //    var destPath;
+	 //    form.on('field', function(name, value) {
+	 //      if (name === 'path') {
+	 //        destPath = value;
+	 //      }
+	 //    });
+	 //    form.on('part', function(part) {
+	 //    	console.log(part)
+	 //      s3.putObject({
+	 //        Bucket: s3Bucket,
+	 //        Key: destPath,
+	 //        ACL: 'public-read',
+	 //        Body: part,
+	 //        ContentLength: part.byteCount,
+	 //      }, function(err, data) {
+	 //      	console.log(data)
+	 //        if (err) throw err;
+	 //        console.log("done", data);
+	 //        res.end("OK");
+	 //        console.log("https://s3.amazonaws.com/" + bucket + '/' + destPath);
+	 //      });
+	 //    });
+	 //    form.parse(req);
+	    //res.json({ message: 'Ok' });
 		// var data = {Key: req.files.image.originalname, Body: req.files.image.path};
 		// s3Bucket.putObject(data, function(err, data){
 		//     if (err)
@@ -62,16 +91,16 @@ router.route('/item')
 		//     }
 		// });
 
-		item.pseudo = req.body.pseudo;  // set the items name (comes from the request)
-		item.tags = req.body.tags;
-		item.imageURI = req.body.imageURI;
+		// item.pseudo = req.body.pseudo;  // set the items name (comes from the request)
+		// item.tags = req.body.tags;
+		// item.imageURI = req.body.imageURI;
 
-		item.save(function(err) {
-			if (err)
-				res.send(err);
+		// item.save(function(err) {
+		// 	if (err)
+		// 		res.send(err);
 
-			res.json({ message: 'Item created!' });
-		});
+		// 	res.json({ message: 'Item created!' });
+		// });
 	})
 
 	// get all the items with pagination (accessed at GET http://localhost:8080/api/items?page=1)
