@@ -50,7 +50,9 @@ router.route('/item')
 
 		var item = new Item();		// create a new instance of the Item model
 		return awsUpload(req, function(err, url) {
-			res.end('ok')
+	      res.end('<html><head></head><body>\
+	                 <h1>All good !</h1>\
+	              </body></html>');
 	    });
 	    //res.json({ message: 'Ok' });
 

@@ -45,10 +45,11 @@ var s3UploadService = function(req, next) {
         mimetype: mimetype
       };
 
-      // Generate date based folder prefix
-      //var datePrefix = moment().format('YYYY[/]MM');
+      var datePrefix = moment().format('YYYY[/]MM');
       var key = crypto.randomBytes(10).toString('hex');
       var hashFilename = key + '-' + filename;
+
+      var pathToArtwork = '/artworks/' + datePrefix + '/' + hashFilename;
 
       pathToArtwork = hashFilename;
 
@@ -57,18 +58,16 @@ var s3UploadService = function(req, next) {
         'Content-Type': req.files[fieldname].mimetype,
         'x-amz-acl': 'public-read'
       };
-
-
-      Knox.aws.putBuffer( req.files[fieldname].buffer, pathToArtwork, headers, function(err, response){
+      Knox.aws.putBuffer(req.files[fieldname].buffer, pathToArtwork, headers, function(err, res){
         if (err) {
           console.error('error streaming image: ', new Date(), err);
           return next(err);
         }
-        if (response.statusCode !== 200) {
+        if (res.statusCode !== 200) {
           console.error('error streaming image: ', new Date(), err);
           return next(err);
         }
-        console.log('Amazon response statusCode: ', response.statusCode);
+        console.log('Amazon response statusCode: ', res.statusCode);
         console.log('Your file was uploaded');
         next();
       });
@@ -82,9 +81,8 @@ var s3UploadService = function(req, next) {
 
   req.busboy.on('finish', function() {
     console.log('Done parsing the form!');
-    next();
     // When everythin's done, render the view
-    //next(null, 'http://www.google.com');
+    next(null, 'http://www.google.com');
   });
 
   // Start the parsing
