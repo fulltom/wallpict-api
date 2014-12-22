@@ -14,7 +14,7 @@ var busboy = require('connect-busboy');
 app.use(morgan('dev')); // log requests to the console
 
 // configure body parser
-app.use(busboy());
+app.use(busboy({ immediate: true }));
 
 var port     = process.env.PORT || 8080; // set our port
 
@@ -44,23 +44,9 @@ router.get('/', function(req, res) {
 router.route('/item')
 	// create a bear (accessed at POST http://localhost:8080/item)
 	.post(function(req, res) {
-		var item = new Item();		// create a new instance of the Item model
 		return awsUpload(req, function(err, url) {
-	      res.json({message :"ok"});
+	      res.json({ message: 'Item created in db' });
 	    });
-	    //res.json({ message: 'Ok' });
-
-
-		// item.pseudo = req.body.pseudo;  // set the items name (comes from the request)
-		// item.tags = req.body.tags;
-		// item.imageURI = req.body.imageURI;
-
-		// item.save(function(err) {
-		// 	if (err)
-		// 		res.send(err);
-
-		// 	res.json({ message: 'Item created!' });
-		// });
 	})
 
 	// get all the items with pagination (accessed at GET http://localhost:8080/api/items?page=1)

@@ -4,25 +4,22 @@ var config = require('./config/config.json');
 //var Knox = require('knox');
 var moment = require('moment');
 var crypto = require('crypto');
-
-// // Create the knox client with your aws settings
-// Knox.aws = Knox.createClient({
-//   key: config.AWS_ACCESS_KEY_ID,
-//   secret: config.AWS_SECRET_ACCESS_KEY,
-//   bucket: config.S3_BUCKET_NAME
-// });
+var inspect = require('util').inspect;
 
 var AWS = require('aws-sdk');
 AWS.config.loadFromPath('./config/config.json');
 AWS.config.update({region: 'eu-central-1'});
 var s3 = new AWS.S3();
 
+var Item     = require('./app/models/item');
 
 // S3 upload service - stream buffers to S3
 // ========================================
 var s3UploadService = function(req, next) {
   req.files = {};
-  var url =[];
+  req.field = {};
+  var item = new Item();    // create a new instance of the Item model
+
   req.busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
     if (!filename) {
       // If filename is not truthy it means there's no file
@@ -51,7 +48,7 @@ var s3UploadService = function(req, next) {
         mimetype: mimetype
       };
 
-      var datePrefix = moment().format('YYYY[/]MM');
+      //var datePrefix = moment().format('YYYY[/]MM');
       var key = crypto.randomBytes(10).toString('hex');
       var hashFilename = key + '-' + filename;
 
@@ -65,8 +62,7 @@ var s3UploadService = function(req, next) {
         'x-amz-acl': 'public-read'
       };
 
-      //var params = {Bucket: 'wallpictstore', Key: 'myKey', Body: 'Hello!'};
-      var data = {
+      var params = {
         Bucket: "wallpictstore",
         Key: pathToArtwork,
         Body: req.files[fieldname].buffer, // thats where im probably wrong
@@ -74,25 +70,36 @@ var s3UploadService = function(req, next) {
         ContentLength : req.files[fieldname].size,
         ACL: 'public-read'
       };
-
-      s3.upload(data, function(err, res) {
-          if (err) {
-            console.log(err)
-           }else{
-            url.push(s3.endpoint.href + data.Bucket+ '/' + data.Key);
-           }
+      s3.upload(params, function(err, data) {
+        if (err) {
+          next(err)
+        }else {
+          var url = data.Location
+        }
        });
     });
   });
+  req.busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated) {
+    req.field[fieldname] = val;
 
+  });
   req.busboy.on('error', function(err) {
     console.error('Error while parsing the form: ', err);
     next(err);
   });
 
-  req.busboy.on('finish', function() {
-    console.log('Done parsing the form!');
+  req.busboy.on('finish', function(url) {
+    console.log(req)
+    // item.pseudo = req.field['pseudo'];  // set the items name (comes from the request)
+    // item.tags = req.field['tags'];
+    // console.log(item)
+    // item.save(function(err) {
+    //  if (err) {
+    //    res.send(err);
+    //  }
     next();
+    // });
+
   });
 
   // Start the parsing
