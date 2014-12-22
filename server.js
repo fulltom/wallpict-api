@@ -9,14 +9,12 @@ var morgan     = require('morgan');
 var awsUpload = require('./aws-streaming');
 var busboy = require('connect-busboy');
 
+
 // configure app
 app.use(morgan('dev')); // log requests to the console
 
 // configure body parser
 app.use(busboy());
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(bodyParser.json());
-// app.use(multer({ dest: './uploads/'}))
 
 var port     = process.env.PORT || 8080; // set our port
 
@@ -38,21 +36,17 @@ router.use(function(req, res, next) {
 
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 router.get('/', function(req, res) {
-	res.json({ message: 'hooray! welcome to our api!'});
+	res.json({ message: 'welcome to our api!'});
 });
 
 // on routes that end in /item
 // ----------------------------------------------------
 router.route('/item')
-
 	// create a bear (accessed at POST http://localhost:8080/item)
 	.post(function(req, res) {
-
 		var item = new Item();		// create a new instance of the Item model
 		return awsUpload(req, function(err, url) {
-	      res.end('<html><head></head><body>\
-	                 <h1>All good !</h1>\
-	              </body></html>');
+	      res.json({message :"ok"});
 	    });
 	    //res.json({ message: 'Ok' });
 

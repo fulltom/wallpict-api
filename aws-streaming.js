@@ -1,22 +1,28 @@
 // Initialize aws client
 // =====================
 var config = require('./config/config.json');
-var Knox = require('knox');
+//var Knox = require('knox');
 var moment = require('moment');
 var crypto = require('crypto');
 
-// Create the knox client with your aws settings
-Knox.aws = Knox.createClient({
-  key: config.AWS_ACCESS_KEY_ID,
-  secret: config.AWS_SECRET_ACCESS_KEY,
-  bucket: config.S3_BUCKET_NAME
-});
+// // Create the knox client with your aws settings
+// Knox.aws = Knox.createClient({
+//   key: config.AWS_ACCESS_KEY_ID,
+//   secret: config.AWS_SECRET_ACCESS_KEY,
+//   bucket: config.S3_BUCKET_NAME
+// });
+
+var AWS = require('aws-sdk');
+AWS.config.loadFromPath('./config/config.json');
+AWS.config.update({region: 'eu-central-1'});
+var s3 = new AWS.S3();
+
 
 // S3 upload service - stream buffers to S3
 // ========================================
 var s3UploadService = function(req, next) {
   req.files = {};
-
+  var url =[];
   req.busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
     if (!filename) {
       // If filename is not truthy it means there's no file
@@ -34,7 +40,7 @@ var s3UploadService = function(req, next) {
       console.log('Error while buffering the stream: ', err);
     });
 
-    file.on('end', function() {
+    file.on('end', function(url) {
       // Concat the chunks into a Buffer
       var finalBuffer = Buffer.concat(this.fileRead);
 
@@ -49,7 +55,7 @@ var s3UploadService = function(req, next) {
       var key = crypto.randomBytes(10).toString('hex');
       var hashFilename = key + '-' + filename;
 
-      var pathToArtwork = '/artworks/' + datePrefix + '/' + hashFilename;
+      //var pathToArtwork = '/artworks/' + datePrefix + '/' + hashFilename;
 
       pathToArtwork = hashFilename;
 
@@ -58,19 +64,24 @@ var s3UploadService = function(req, next) {
         'Content-Type': req.files[fieldname].mimetype,
         'x-amz-acl': 'public-read'
       };
-      Knox.aws.putBuffer(req.files[fieldname].buffer, pathToArtwork, headers, function(err, res){
-        if (err) {
-          console.error('error streaming image: ', new Date(), err);
-          return next(err);
-        }
-        if (res.statusCode !== 200) {
-          console.error('error streaming image: ', new Date(), err);
-          return next(err);
-        }
-        console.log('Amazon response statusCode: ', res.statusCode);
-        console.log('Your file was uploaded');
-        next();
-      });
+
+      //var params = {Bucket: 'wallpictstore', Key: 'myKey', Body: 'Hello!'};
+      var data = {
+        Bucket: "wallpictstore",
+        Key: pathToArtwork,
+        Body: req.files[fieldname].buffer, // thats where im probably wrong
+        ContentType: req.files[fieldname].mimetype,
+        ContentLength : req.files[fieldname].size,
+        ACL: 'public-read'
+      };
+
+      s3.upload(data, function(err, res) {
+          if (err) {
+            console.log(err)
+           }else{
+            url.push(s3.endpoint.href + data.Bucket+ '/' + data.Key);
+           }
+       });
     });
   });
 
@@ -81,8 +92,7 @@ var s3UploadService = function(req, next) {
 
   req.busboy.on('finish', function() {
     console.log('Done parsing the form!');
-    // When everythin's done, render the view
-    next(null, 'http://www.google.com');
+    next();
   });
 
   // Start the parsing
