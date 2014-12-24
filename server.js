@@ -44,7 +44,7 @@ router.get('/', function(req, res) {
 router.route('/item')
 	// create a bear (accessed at POST http://localhost:8080/item)
 	.post(function(req, res) {
-		return awsUpload(req, function(err, url) {
+		return awsUpload(req, function(err) {
 	      res.json({ message: 'Item created in db' });
 	    });
 	})
