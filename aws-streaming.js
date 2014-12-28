@@ -18,7 +18,6 @@ var Item     = require('./app/models/item');
 var s3UploadService = function(req, next) {
 	req.files = {};
 	req.field = {};
-	var foo = {};
 	var item = new Item();    // create a new instance of the Item model
 
 	req.busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
@@ -94,6 +93,7 @@ var s3UploadService = function(req, next) {
 	req.busboy.on('finish', function(url) {
 		item.pseudo = req.field['pseudo'];  // set the items name (comes from the request)
 		item.tags = req.field['tags'];
+		item.comment = req.field['comment'];
 		item.save(function(err) {
 			 if (err) {
 			   res.send(err);
@@ -104,7 +104,6 @@ var s3UploadService = function(req, next) {
 
 	// Start the parsing
 	req.pipe(req.busboy);
-	console.log(foo)
 };
 
 module.exports = s3UploadService;

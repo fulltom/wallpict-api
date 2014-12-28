@@ -9,15 +9,19 @@
 		<script src="public/ejs.min.js" type="text/javascript"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 		<script src="public/moment.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.css">
 		<link rel="stylesheet" type="text/css" href="public/items.css">
 	</head>
 	<body>
-	    <form id="uploadForm" enctype="multipart/form-data" action="/api/item" method="post">
-		<input type="file" name="image" />
-		<input tyle="text" name="pseudo" />
-		<input tyle="text" name="tags" />
-		<input type="submit" value="Submit" name="submit">
-		</form>
+		<div id="upload">
+		    <form id="uploadForm" enctype="multipart/form-data" action="/api/item" method="post">
+			<input type="file" name="image" />
+			<input tyle="text" name="pseudo" />
+			<input tyle="text" name="tags" />
+			<input tyle="text" name="comment" />
+			<input type="submit" value="Submit" name="submit">
+			</form>
+		</div>
 		<script src="public/main.js" type="text/javascript"></script>
 		<div id="container"></div>
 	</body>

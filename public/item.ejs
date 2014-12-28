@@ -2,9 +2,10 @@
 <div class="item">
     <img src="<%- d.imageURI %>" alt="" />
     <div class="info">
-	    <p><%= moment(d.createdAt).fromNow() %></p>
-	    <p><%- d.pseudo %></p>
-	    <p><%- d.tags %></p>
+	    <p class="date"><%= moment(d.createdAt).fromNow() %></p>
+	    <p class="pseudo"><%- d.pseudo %></p>
+	    <p class="tags"><%- d.tags %></p>
+	    <p class="comment"><%- d.comment %></p>
     </div>
 </div>
 <% }); %>
