@@ -15,6 +15,8 @@ app.use(morgan('dev')); // log requests to the console
 
 // configure body parser
 app.use(busboy({ immediate: true }));
+app.set('view engine', 'ejs');
+app.set('views', __dirname + '/app/views');
 
 var port     = process.env.PORT || 8080; // set our port
 
@@ -34,6 +36,7 @@ router.use(function(req, res, next) {
 	next();
 });
 
+
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 router.get('/', function(req, res) {
 	res.json({ message: 'welcome to our api!'});
@@ -45,7 +48,8 @@ router.route('/item')
 	// create a bear (accessed at POST http://localhost:8080/item)
 	.post(function(req, res) {
 		return awsUpload(req, function(err) {
-	      res.json({ message: 'Item created in db' });
+	      //res.json({ message: 'Item created in db' });
+	      res.redirect('/')
 	    });
 	})
 
@@ -118,6 +122,17 @@ router.route('/item/:item_id')
 
 // REGISTER OUR ROUTES -------------------------------
 app.use('/api', router);
+
+
+// ROUTES FOR WEBAPP
+// =============================================================================
+app.get('/', function(req, res) {
+    res.render('index');
+});
+app.post('/', function(req, res) {
+    res.render('index');
+});
+
 
 // START THE SERVER
 // =============================================================================
