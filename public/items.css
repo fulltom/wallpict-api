@@ -1,0 +1,4 @@
+.item {position:relative; width:300px; height:auto;}
+.item img{display: block;max-width:100%;height:auto; margin:0; padding:0;}
+.item .info{position:absolute; bottom:0; background-color:black; width:100%;}
+.item .info p {color:white;}

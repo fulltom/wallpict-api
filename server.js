@@ -8,6 +8,7 @@ var app        = express();
 var morgan     = require('morgan');
 var awsUpload = require('./aws-streaming');
 var busboy = require('connect-busboy');
+var moment = require('moment');
 
 
 // configure app
@@ -17,6 +18,7 @@ app.use(morgan('dev')); // log requests to the console
 app.use(busboy({ immediate: true }));
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/app/views');
+app.use("/public", express.static(__dirname + '/public'));
 
 var port     = process.env.PORT || 8080; // set our port
 
@@ -127,7 +129,7 @@ app.use('/api', router);
 // ROUTES FOR WEBAPP
 // =============================================================================
 app.get('/', function(req, res) {
-    res.render('index');
+    res.render('index', {moment : moment});
 });
 app.post('/', function(req, res) {
     res.render('index');
