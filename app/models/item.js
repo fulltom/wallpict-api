@@ -3,7 +3,8 @@ var Schema       = mongoose.Schema;
 
 
 var getTags = function (tags) {
-  return tags.join(',');
+	console.log(tags)
+  return tags.join('# ');
 };
 
 var setTags = function (tags) {
