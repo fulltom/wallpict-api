@@ -121,6 +121,22 @@ router.route('/item/:item_id')
 		});
 	});
 
+// LIKE ROUTE -------------------------------
+router.route('/item/:item_id/like')
+	.post(function(req, res) {
+		Item.update({_id:req.params.item_id}, {$inc:{"likes":1}}, function(err, item) {
+			if (err)
+				res.send(err);
+				res.json({ message: 'Succefully increment like' });
+		});
+	})
+	.put(function(req, res) {
+		Item.update({_id:req.params.item_id}, {$inc:{"likes":-1}}, function(err, item) {
+			if (err)
+				res.send(err);
+				res.json({ message: 'Succefully decrement like' });
+		});
+	})
 
 // REGISTER OUR ROUTES -------------------------------
 app.use('/api', router);

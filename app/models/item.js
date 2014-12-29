@@ -15,7 +15,8 @@ var ItemSchema   = new Schema({
 	createdAt: { type : Date, default : Date.now },
 	tags: {type: [], get: getTags, set: setTags},
 	imageURI : {type : String},
-	comment : {type : String}
+	comment : {type : String},
+	likes : {type : Number}
 });
 
 module.exports = mongoose.model('Item', ItemSchema);
