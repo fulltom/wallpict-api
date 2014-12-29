@@ -15,10 +15,12 @@
 	<body>
 		<div id="upload">
 		    <form id="uploadForm" enctype="multipart/form-data" action="/api/item" method="post">
-			<input type="file" name="image" />
-			<input tyle="text" name="pseudo" />
-			<input tyle="text" name="tags" />
+			<div class="upload">
+				<input type="file" name="image" />
+			</div>
+			<input tyle="text" placeholder="Type your pseudo ?" class="inpPseudo" name="pseudo" />
 			<input tyle="text" name="comment" />
+			<input tyle="text" name="tags" />
 			<input type="submit" value="Submit" name="submit">
 			</form>
 		</div>
