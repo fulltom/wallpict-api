@@ -11,8 +11,8 @@ overflow:hidden; zoom:1;}
 .item .info .head {overflow:hidden; line-height:18px; padding-bottom:5px;}
 .item .info .head .date {margin-right:15px; font-size:13px; padding-top:1px; color:grey; font-style:italic;}
 .item .info .head .pseudo {font-size:16px; color:black; float:left; font-family: Georgia, 'lucida grande',tahoma,verdana,arial,sans-serif}
-.item .info .tags {font-size:14px; padding-bottom:5px; color:;}
-.item .info .comment {font-size:14px; color:grey; padding-bottom:5px;}
+.item .info .tags {font-size:15px; padding-bottom:10px; color:black;}
+.item .info .comment {font-size:16px; color:grey; padding-bottom:5px;}
 .item .info .likeCount {margin-left:20px; font-size:14px; color:#6d84b4; font-size:14px;}
 .item .info #like {font-size:14px; color:#6d84b4; text-decoration:none;float:left; margin-right:10px;}
 .item .info #like:hover {text-decoration: underline;}
