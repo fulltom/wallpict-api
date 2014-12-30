@@ -6,7 +6,8 @@ body {background-color:#e9eaed;}
 -webkit-box-shadow: 1px 1px 2px 1px #cfcfcf;
 -o-box-shadow: 1px 1px 2px 1px #cfcfcf;
 box-shadow: 1px 1px 2px 1px #cfcfcf;
-overflow:hidden; zoom:1; background-color:white;}
+overflow:hidden; zoom:1; background-color:white;
+}
 .inpPseudo {box-shadow: 0 0 3px rgba(0,0,0,0.1) inset; font-size:14px; border: 1px solid #c1c1c1; background: #fdfdfd; border-radius:2px; padding:5px;}
 .item img{display:block; max-width:100%; margin:0; padding:0;}
 .item .info{background-color:white; width:100%; margin:0; position:relative; padding:10px 0 5px 0;}

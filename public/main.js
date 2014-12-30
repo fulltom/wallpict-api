@@ -8,6 +8,7 @@
            // Generate the html from the given data.
            var html = func(data);
            $('#container').html(html);
+           //($( "p.tags" ).text()).replace(",", "#");
         });
     });
 })();

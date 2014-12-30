@@ -1,23 +1,18 @@
 var mongoose     = require('mongoose');
 var Schema       = mongoose.Schema;
 
-
-var getTags = function (tags) {
-	console.log(tags)
-  return tags.join('# ');
-};
-
-var setTags = function (tags) {
-  return tags.split(',');
-};
+// function setTags(tags) {
+//   return tags.join(' ');
+// };
 
 var ItemSchema   = new Schema({
 	pseudo: {type : String, default : '', trim : true},
 	createdAt: { type : Date, default : Date.now },
-	tags: {type: [], get: getTags, set: setTags},
+	tags: {type: []},
 	imageURI : {type : String},
 	comment : {type : String},
 	likes : {type : Number}
 });
 
-module.exports = mongoose.model('Item', ItemSchema);
+mongoose.model('Item', ItemSchema);
+module.exports = mongoose.model('Item');
