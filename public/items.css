@@ -1,14 +1,15 @@
-#upload {margin-bottom:50px; background-color:#f3f3f3;height:80px;}
+body {background-color:#e9eaed;}
+#upload {margin-bottom:30px; padding:10px; margin-top:20px; background-color:#f3f3f3;height:80px; background-color:white;}
 #container {margin-left:20px;}
 .item {position:relative; width:400px; margin-bottom:20px; padding:10px;
 -moz-box-shadow: 1px 1px 2px 1px #cfcfcf;
 -webkit-box-shadow: 1px 1px 2px 1px #cfcfcf;
 -o-box-shadow: 1px 1px 2px 1px #cfcfcf;
 box-shadow: 1px 1px 2px 1px #cfcfcf;
-overflow:hidden; zoom:1;}
+overflow:hidden; zoom:1; background-color:white;}
 .inpPseudo {box-shadow: 0 0 3px rgba(0,0,0,0.1) inset; font-size:14px; border: 1px solid #c1c1c1; background: #fdfdfd; border-radius:2px; padding:5px;}
 .item img{display:block; max-width:100%; margin:0; padding:0;}
-.item .info{background-color:white; width:100%; margin:0; position:relative; padding:10px;}
+.item .info{background-color:white; width:100%; margin:0; position:relative; padding:10px 0 5px 0;}
 .item .info .head {overflow:hidden; line-height:18px; padding-bottom:5px;}
 .item .info .head .date {margin-right:15px; font-size:13px; padding-top:1px; color:grey; font-style:italic;}
 .item .info .head .pseudo {font-size:16px; color:black; float:left; font-family: Georgia, 'lucida grande',tahoma,verdana,arial,sans-serif}
