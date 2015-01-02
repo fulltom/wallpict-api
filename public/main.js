@@ -15,6 +15,10 @@ $(document).ready(function() {
            // Generate the html from the given data.
            var html = func(data);
            $('#container').html(html);
-        });
+           // $('#like').click(function(e){
+           //  $.post( "/api/item/54a6bc5ecb2f8d8f2a000002/like", function (data) {
+           //    $( ".likeCount" ).html( data );
+           //  });
+          });
     });
 })();

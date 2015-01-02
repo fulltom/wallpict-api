@@ -137,6 +137,13 @@ router.route('/item/:item_id/like')
 				res.json({ message: 'Succefully decrement like' });
 		});
 	})
+	.get(function(req, res) {
+		Item.find({_id:req.params.item_id, "likes":{'$exists': true }}, function(err, item) {
+			if (err)
+				res.send(err);
+			res.json(item[0].likes);
+		});
+	})
 
 // REGISTER OUR ROUTES -------------------------------
 app.use('/api', router);
