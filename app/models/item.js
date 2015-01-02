@@ -2,7 +2,7 @@ var mongoose     = require('mongoose');
 var Schema       = mongoose.Schema;
 
 // function setTags(tags) {
-//   return tags.join(' ');
+//
 // };
 
 var ItemSchema   = new Schema({

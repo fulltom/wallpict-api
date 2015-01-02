@@ -8,6 +8,28 @@ body {background-color:#e9eaed;}
 box-shadow: 1px 1px 2px 1px #cfcfcf;
 overflow:hidden; zoom:1; background-color:white;
 }
+#fileElem {
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+#fileSelect {
+   background: #6fabd4;
+  background-image: -webkit-linear-gradient(top, #6fabd4, #3987b8);
+  background-image: -moz-linear-gradient(top, #6fabd4, #3987b8);
+  background-image: -ms-linear-gradient(top, #6fabd4, #3987b8);
+  background-image: -o-linear-gradient(top, #6fabd4, #3987b8);
+  background-image: linear-gradient(to bottom, #6fabd4, #3987b8);
+  -webkit-border-radius: 3;
+  -moz-border-radius: 3;
+  border-radius: 3px;
+  border:none;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 16px;
+  padding: 10px;
+  text-decoration: none;
+}
 .inpPseudo {box-shadow: 0 0 3px rgba(0,0,0,0.1) inset; font-size:14px; border: 1px solid #c1c1c1; background: #fdfdfd; border-radius:2px; padding:5px;}
 .item img{display:block; max-width:100%; margin:0; padding:0;}
 .item .info{background-color:white; width:100%; margin:0; position:relative; padding:10px 0 5px 0;}
@@ -15,6 +37,7 @@ overflow:hidden; zoom:1; background-color:white;
 .item .info .head .date {margin-right:15px; font-size:13px; padding-top:1px; color:grey; font-style:italic;}
 .item .info .head .pseudo {font-size:16px; color:black; float:left; font-family: Georgia, 'lucida grande',tahoma,verdana,arial,sans-serif}
 .item .info .tags {font-size:15px; padding-bottom:10px; color:black;}
+.item .info .tags .itms {font-size:15px; color:#3b5998; text-decoration:none;}
 .item .info .comment {font-size:16px; color:grey; padding-bottom:5px;}
 .item .info .likeCount {margin-left:20px; font-size:14px; color:#6d84b4; font-size:14px;}
 .item .info #like {font-size:14px; color:#6d84b4; text-decoration:none;float:left; margin-right:10px;}

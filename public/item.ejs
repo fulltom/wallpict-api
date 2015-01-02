@@ -7,7 +7,11 @@
 	    	<p class="date"><span>-</span>&nbsp;<%= moment(d.createdAt).fromNow() %></p>
     	</div>
 	    <p class="comment"><%- d.comment %></p>
-	    <p class="tags"><%- d.tags %></p>
+	    <p class="tags">
+            <% d.tags.forEach(function (t) { %>
+             <a href="#" class="itms" title="<%- t %>"><%- t %></a>
+            <% }); %>
+        </p>
 	    <a id="like" href="javascript:void();">Like</a>
 	    <p class="likeCount"><%- d.likes %></p>
     </div>

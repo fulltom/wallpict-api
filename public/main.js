@@ -1,3 +1,10 @@
+$(document).ready(function() {
+  document.querySelector('#fileSelect').addEventListener('click', function(e) {
+    // Use the native click() of the file input.
+    document.querySelector('#fileElem').click();
+  }, false);
+});
+
 (function getData() {
     // Grab the template
     $.get('/public/item.ejs', function (template) {
@@ -8,7 +15,6 @@
            // Generate the html from the given data.
            var html = func(data);
            $('#container').html(html);
-           //($( "p.tags" ).text()).replace(",", "#");
         });
     });
 })();
