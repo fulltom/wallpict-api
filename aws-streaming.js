@@ -1,10 +1,8 @@
 // Initialize aws client
 // =====================
 var config = require('./config/config.json');
-//var Knox = require('knox');
 var moment = require('moment');
 var crypto = require('crypto');
-var inspect = require('util').inspect;
 
 var AWS = require('aws-sdk');
 AWS.config.loadFromPath('./config/config.json');
@@ -72,11 +70,11 @@ var s3UploadService = function(req, next) {
 			};
 				s3.upload(params, function(err, res) {
 					if(err) {
-                console.log('Upload error - ' + err);
-                return err;
-            } else {
-                console.log('uploaded file[' + params.Key + ']');
-            }
+		                console.log('Upload error - ' + err);
+		                return err;
+		            } else {
+		                console.log('uploaded file[' + params.Key + ']');
+		            }
 				});
 				item.imageURI = 'https://'+params.Bucket+'.s3.eu-central-1.amazonaws.com/'+params.Key
 		});

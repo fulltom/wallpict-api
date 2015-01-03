@@ -1,9 +1,6 @@
 var mongoose     = require('mongoose');
 var Schema       = mongoose.Schema;
 
-// function setTags(tags) {
-//
-// };
 
 var ItemSchema   = new Schema({
 	pseudo: {type : String, default : '', trim : true},

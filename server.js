@@ -6,10 +6,10 @@ var express    = require('express');
 var bodyParser = require('body-parser');
 var app        = express();
 var morgan     = require('morgan');
-var awsUpload = require('./aws-streaming');
 var busboy = require('connect-busboy');
 var moment = require('moment');
-
+var itemCtr = require('./app/controllers/item');
+var userCtr = require('./app/controllers/user');
 
 // configure app
 app.use(morgan('dev')); // log requests to the console
@@ -24,12 +24,11 @@ var port     = process.env.PORT || 8080; // set our port
 
 var mongoose   = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/items'); // connect to our database
-var Item     = require('./app/models/item');
+
 
 // ROUTES FOR OUR API
 // =============================================================================
 
-// create our router
 var router = express.Router();
 
 // middleware to use for all requests
@@ -38,115 +37,58 @@ router.use(function(req, res, next) {
 	next();
 });
 
-
-// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
+//Test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 router.get('/', function(req, res) {
 	res.json({ message: 'welcome to our api!'});
 });
 
-// on routes that end in /item
-// ----------------------------------------------------
-router.route('/item')
-	// create a bear (accessed at POST http://localhost:8080/item)
-	.post(function(req, res) {
-		return awsUpload(req, function(err) {
-	      //res.json({ message: 'Item created in db' });
-	      res.redirect('/')
-	    });
-	})
+// Create endpoint handlers for /items
+router.route('/items')
+	.post(itemCtr.postItems)
+	.get(itemCtr.getItems);
 
-	// get all the items with pagination (accessed at GET http://localhost:8080/api/items?page=1)
-	.get(function(req, res) {
-		var page = (req.param('page') > 0 ? req.param('page') : 1) - 1;
-		var limit = req.param('limit') || 5
-	Item
-		.find()
-		.limit(limit)
-		.skip(limit * page)
-		.sort({createdAt: 'desc'})
-		.exec(function (err, items) {
-		  Item.count().exec(function (err, count) {
-		    res.json('items', {
-		        items: items
-		      , page: page
-		      , pages: Math.floor(count / limit)
-		    })
-		  })
-		})
-	});
+// Create endpoint handlers for /items/:items_id
+router.route('/items/:item_id')
+	.get(itemCtr.getItem)
+	.put(itemCtr.putItem)
+	.delete(itemCtr.deleteItem);
 
-// on routes that end in /item/:item_id
-// ----------------------------------------------------
-router.route('/item/:item_id')
 
-	// get the bear with that id
-	.get(function(req, res) {
-		Item.findById(req.params.item_id, function(err, item) {
-			if (err)
-				res.send(err);
-			res.json(item);
-		});
-	})
+// Create endpoint handlers for /users
+router.route('/users')
+  .post(userCtr.postUsers)
+  .get(userCtr.getUsers);
 
-	// update the item with this id
-	.put(function(req, res) {
-		Item.findById(req.params.item_id, function(err, item) {
 
-			if (err)
-				res.send(err);
-
-			item.pseudo = req.body.pseudo;
-			item.tags = req.body.tags;
-			item.imageURI = req.body.imageURI;
-
-			item.save(function(err) {
-				if (err)
-					res.send(err);
-
-				res.json({ message: 'Item updated!' });
-			});
-
-		});
-	})
-
-	// delete the bear with this id
-	.delete(function(req, res) {
-		Item.remove({
-			_id: req.params.item_id
-		}, function(err, item) {
-			if (err)
-				res.send(err);
-
-			res.json({ message: 'Successfully deleted' });
-		});
-	});
-
-// LIKE ROUTE -------------------------------
-router.route('/item/:item_id/like')
-	.post(function(req, res) {
-		Item.update({_id:req.params.item_id}, {$inc:{"likes":1}}, function(err, item) {
-			if (err)
-				res.send(err);
-				res.json({ message: 'Succefully increment like' });
-		});
-	})
-	.put(function(req, res) {
-		Item.update({_id:req.params.item_id}, {$inc:{"likes":-1}}, function(err, item) {
-			if (err)
-				res.send(err);
-				res.json({ message: 'Succefully decrement like' });
-		});
-	})
-	.get(function(req, res) {
-		Item.find({_id:req.params.item_id, "likes":{'$exists': true }}, function(err, item) {
-			if (err)
-				res.send(err);
-			res.json(item[0].likes);
-		});
-	})
+// // LIKE ROUTE -------------------------------
+// router.route('/item/:item_id/like')
+// 	.post(function(req, res) {
+// 		Item.update({_id:req.params.item_id}, {$inc:{"likes":1}}, function(err, item) {
+// 			if (err)
+// 				res.send(err);
+// 				res.json({ message: 'Succefully increment like' });
+// 		});
+// 	})
+// 	.put(function(req, res) {
+// 		Item.update({_id:req.params.item_id}, {$inc:{"likes":-1}}, function(err, item) {
+// 			if (err)
+// 				res.send(err);
+// 				res.json({ message: 'Succefully decrement like' });
+// 		});
+// 	})
+// 	.get(function(req, res) {
+// 		Item.find({_id:req.params.item_id, "likes":{'$exists': true }}, function(err, item) {
+// 			if (err)
+// 				res.send(err);
+// 			res.json(item[0].likes);
+// 		});
+// 	})
 
 // REGISTER OUR ROUTES -------------------------------
 app.use('/api', router);
+
+//END ROUTES FOR OUR API
+// =============================================================================
 
 
 // ROUTES FOR WEBAPP
@@ -162,4 +104,4 @@ app.post('/', function(req, res) {
 // START THE SERVER
 // =============================================================================
 app.listen(port);
-console.log('Magic happens on port ' + port);
+console.log('Server Started on ' + port);
