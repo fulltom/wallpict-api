@@ -1,30 +1,36 @@
 // BASE SETUP
 // =============================================================================
 
-// call the packages we need
+// Call the packages we need
 var express    = require('express');
 var bodyParser = require('body-parser');
 var app        = express();
 var morgan     = require('morgan');
 var busboy = require('connect-busboy');
 var moment = require('moment');
-var itemCtr = require('./app/controllers/item');
-var userCtr = require('./app/controllers/user');
-
-// configure app
-app.use(morgan('dev')); // log requests to the console
-
-// configure body parser
-app.use(busboy({ immediate: true }));
-app.set('view engine', 'ejs');
-app.set('views', __dirname + '/app/views');
-app.use("/public", express.static(__dirname + '/public'));
-
-var port     = process.env.PORT || 8080; // set our port
+var passport = require('passport');
+var expressSession = require('express-session');
 
 var mongoose   = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/items'); // connect to our database
 
+// call controllers
+var itemCtr = require('./app/controllers/item');
+//var userCtr = require('./app/controllers/user');
+
+// Configuring app
+app.use(morgan('dev')); // log requests to the console
+app.use(busboy({ immediate: true }));
+app.use("/public", express.static(__dirname + '/public'));
+app.set('view engine', 'ejs');
+app.set('views', __dirname + '/app/views');
+
+// Configuring Passport
+app.use(expressSession({secret: 'viadeo'}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+var port     = process.env.PORT || 8080; // set our port
 
 // ROUTES FOR OUR API
 // =============================================================================
@@ -36,6 +42,12 @@ router.use(function(req, res, next) {
 	// do logging
 	next();
 });
+
+ // Using the flash middleware provided by connect-flash to store messages in session
+ // and displaying in templates
+var flash = require('connect-flash');
+app.use(flash());
+
 
 //Test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 router.get('/', function(req, res) {
@@ -54,35 +66,11 @@ router.route('/items/:item_id')
 	.delete(itemCtr.deleteItem);
 
 
-// Create endpoint handlers for /users
-router.route('/users')
-  .post(userCtr.postUsers)
-  .get(userCtr.getUsers);
+// // Create endpoint handlers for /users
+// router.route('/users')
+//   .post(userCtr.postUsers)
+//   .get(userCtr.getUsers);
 
-
-// // LIKE ROUTE -------------------------------
-// router.route('/item/:item_id/like')
-// 	.post(function(req, res) {
-// 		Item.update({_id:req.params.item_id}, {$inc:{"likes":1}}, function(err, item) {
-// 			if (err)
-// 				res.send(err);
-// 				res.json({ message: 'Succefully increment like' });
-// 		});
-// 	})
-// 	.put(function(req, res) {
-// 		Item.update({_id:req.params.item_id}, {$inc:{"likes":-1}}, function(err, item) {
-// 			if (err)
-// 				res.send(err);
-// 				res.json({ message: 'Succefully decrement like' });
-// 		});
-// 	})
-// 	.get(function(req, res) {
-// 		Item.find({_id:req.params.item_id, "likes":{'$exists': true }}, function(err, item) {
-// 			if (err)
-// 				res.send(err);
-// 			res.json(item[0].likes);
-// 		});
-// 	})
 
 // REGISTER OUR ROUTES -------------------------------
 app.use('/api', router);
@@ -90,15 +78,20 @@ app.use('/api', router);
 //END ROUTES FOR OUR API
 // =============================================================================
 
+// Initialize Passport
+var initPassport = require('./app/passport/init');
+initPassport(passport);
 
 // ROUTES FOR WEBAPP
 // =============================================================================
-app.get('/', function(req, res) {
-    res.render('index', {moment : moment});
-});
-app.post('/', function(req, res) {
-    res.render('index');
-});
+// app.get('/home', function(req, res) {
+//     res.render('index', {moment : moment});
+// });
+// app.post('/home', function(req, res) {
+//     res.render('index');
+// });
+var routes = require('./app/routes/index')(passport);
+app.use('/', routes);
 
 
 // START THE SERVER
