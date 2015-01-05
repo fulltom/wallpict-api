@@ -8,12 +8,11 @@ var app            = express();
 var morgan         = require('morgan');
 var busboy         = require('connect-busboy');
 var moment         = require('moment');
-var passport       = require('passport');
 var expressSession = require('express-session');
 var cookieParser       = require('cookie-parser');
 
 var mongoose   = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/items'); // connect to our database
+mongoose.connect('mongodb://localhost:27017/wallpict'); // connect to our database
 
 // call controllers
 var itemCtr = require('./app/controllers/item');
@@ -28,6 +27,7 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/app/views');
 
 // Configuring Passport
+var passport       = require('passport');
 var expressSession = require('express-session');
 // TODO - Why Do we need this key ?
 app.use(expressSession({secret: 'viadeo'}));

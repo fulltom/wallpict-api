@@ -3,6 +3,7 @@ var User = require('../models/user');
 var bCrypt = require('bcrypt-nodejs');
 
 module.exports = function(passport){
+
     passport.use('signup', new LocalStrategy({
             passReqToCallback : true // allows us to pass back the entire request to the callback
         },
@@ -20,6 +21,7 @@ module.exports = function(passport){
                         console.log('User already exists with username: '+username);
                         return done(null, false, req.flash('message','User Already Exists'));
                     } else {
+
                         // if there is no user with that email
                         // create the user
                         var newUser = new User();

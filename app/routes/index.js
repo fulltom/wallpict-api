@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
+
 var isAuthenticated = function (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler
 	// Passport adds this method to request object. A middleware is allowed to add properties to
@@ -19,12 +20,12 @@ module.exports = function(passport){
 		res.render('index', { message: req.flash('message') });
 	});
 
-	/* Handle Login POST */
-	router.post('/login', passport.authenticate('login', {
-		successRedirect: '/home',
-		failureRedirect: '/',
-		failureFlash : true
-	}));
+	// /* Handle Login POST */
+	// router.post('/login', passport.authenticate('login', {
+	// 	successRedirect: '/home',
+	// 	failureRedirect: '/',
+	// 	failureFlash : true
+	// }));
 
 	/* GET Registration Page */
 	router.get('/signup', function(req, res){
