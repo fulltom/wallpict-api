@@ -2,14 +2,15 @@
 // =============================================================================
 
 // Call the packages we need
-var express    = require('express');
-var bodyParser = require('body-parser');
-var app        = express();
-var morgan     = require('morgan');
-var busboy = require('connect-busboy');
-var moment = require('moment');
-var passport = require('passport');
+var express        = require('express');
+var bodyParser     = require('body-parser');
+var app            = express();
+var morgan         = require('morgan');
+var busboy         = require('connect-busboy');
+var moment         = require('moment');
+var passport       = require('passport');
 var expressSession = require('express-session');
+var cookieParser       = require('cookie-parser');
 
 var mongoose   = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/items'); // connect to our database
@@ -21,11 +22,14 @@ var itemCtr = require('./app/controllers/item');
 // Configuring app
 app.use(morgan('dev')); // log requests to the console
 app.use(busboy({ immediate: true }));
+app.use(cookieParser());
 app.use("/public", express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/app/views');
 
 // Configuring Passport
+var expressSession = require('express-session');
+// TODO - Why Do we need this key ?
 app.use(expressSession({secret: 'viadeo'}));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -42,11 +46,6 @@ router.use(function(req, res, next) {
 	// do logging
 	next();
 });
-
- // Using the flash middleware provided by connect-flash to store messages in session
- // and displaying in templates
-var flash = require('connect-flash');
-app.use(flash());
 
 
 //Test route to make sure everything is working (accessed at GET http://localhost:8080/api)
@@ -65,13 +64,6 @@ router.route('/items/:item_id')
 	.put(itemCtr.putItem)
 	.delete(itemCtr.deleteItem);
 
-
-// // Create endpoint handlers for /users
-// router.route('/users')
-//   .post(userCtr.postUsers)
-//   .get(userCtr.getUsers);
-
-
 // REGISTER OUR ROUTES -------------------------------
 app.use('/api', router);
 
@@ -79,17 +71,13 @@ app.use('/api', router);
 // =============================================================================
 
 // Initialize Passport
+var flash = require('connect-flash');
+app.use(flash());
+
+// Initialize Passport
 var initPassport = require('./app/passport/init');
 initPassport(passport);
 
-// ROUTES FOR WEBAPP
-// =============================================================================
-// app.get('/home', function(req, res) {
-//     res.render('index', {moment : moment});
-// });
-// app.post('/home', function(req, res) {
-//     res.render('index');
-// });
 var routes = require('./app/routes/index')(passport);
 app.use('/', routes);
 
