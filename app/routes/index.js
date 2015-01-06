@@ -20,12 +20,12 @@ module.exports = function(passport){
 		res.render('index', { message: req.flash('message') });
 	});
 
-	// /* Handle Login POST */
-	// router.post('/login', passport.authenticate('login', {
-	// 	successRedirect: '/home',
-	// 	failureRedirect: '/',
-	// 	failureFlash : true
-	// }));
+	/* Handle Login POST */
+	router.post('/login', passport.authenticate('login', {
+		successRedirect: '/home',
+		failureRedirect: '/',
+		failureFlash : true
+	}));
 
 	/* GET Registration Page */
 	router.get('/signup', function(req, res){

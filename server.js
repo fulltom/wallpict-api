@@ -10,6 +10,7 @@ var busboy         = require('connect-busboy');
 var moment         = require('moment');
 var expressSession = require('express-session');
 var cookieParser       = require('cookie-parser');
+var bodyParser = require('body-parser');
 
 var mongoose   = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/wallpict'); // connect to our database
@@ -21,7 +22,8 @@ var itemCtr = require('./app/controllers/item');
 // Configuring app
 app.use(morgan('dev')); // log requests to the console
 app.use(busboy({ immediate: true }));
-app.use(cookieParser());
+//app.use(bodyParser.json());
+//app.use(bodyParser.urlencoded());
 app.use("/public", express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/app/views');
@@ -64,7 +66,7 @@ router.route('/items/:item_id')
 	.put(itemCtr.putItem)
 	.delete(itemCtr.deleteItem);
 
-// REGISTER OUR ROUTES -------------------------------
+//REGISTER OUR ROUTES -------------------------------
 app.use('/api', router);
 
 //END ROUTES FOR OUR API
