@@ -40,7 +40,7 @@ module.exports = function(passport){
 	}));
 
 	/* GET Home Page */
-	router.get('/', function(req, res){
+	router.get('/',isAuthenticated, function(req, res){
 		res.render('index', { user: req.user });
 	});
 
