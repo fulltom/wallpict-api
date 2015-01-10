@@ -3,20 +3,30 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>Login</title>
+		<title></title>
 		<meta name="description" content="">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script src="public/ejs.min.js" type="text/javascript"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 		<script src="public/moment.js"></script>
 		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.css">
 		<link rel="stylesheet" type="text/css" href="public/items.css">
 	</head>
 	<body>
-	<form action="/login" method="post">
-		<input type="text" name="username" placeholder="username" />
-		<input type="password" name="password" placeholder="Password" />
-		<button type="submit">Sign in</button>
-	</form>
-	<a href="/signup">Create an account</a>
+		<nav><span><% if (user) { %> <%= user.username %> <% } %></span><a href="/logout">logout</a></nav>
+		<div id="upload">
+		    <form id="uploadForm" enctype="multipart/form-data" action="/api/items" method="post">
+				<div class="upload">
+					<button id ="fileSelect">Upload your picture</button>
+					<input type="file" id="fileElem" name="image" />
+				</div>
+				<input tyle="text" placeholder="Type your pseudo !" class="inpPseudo" name="pseudo" />
+				<input tyle="text" placeholder="Leave a comment !" name="comment" />
+				<input tyle="text" placeholder="Put tags separate with coma !" name="tags" />
+				<input type="submit" value="Submit" name="submit">
+			</form>
+		</div>
+		<script src="public/main.js" type="text/javascript"></script>
+		<div id="container"></div>
 	</body>
 </html>

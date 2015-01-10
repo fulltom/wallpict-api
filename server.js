@@ -21,9 +21,10 @@ var itemCtr = require('./app/controllers/item');
 
 // Configuring app
 app.use(morgan('dev')); // log requests to the console
+app.use(busboy());
 app.use(busboy({ immediate: true }));
-//app.use(bodyParser.json());
-//app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
 app.use("/public", express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/app/views');
