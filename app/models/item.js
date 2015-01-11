@@ -9,6 +9,7 @@ var ItemSchema   = new Schema({
 	imageURI : {type : String},
 	comment : {type : String},
 	likes : {type : Number}
+
 });
 
 mongoose.model('Item', ItemSchema);

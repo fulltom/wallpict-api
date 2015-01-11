@@ -89,7 +89,6 @@ var s3UploadService = function(req, next) {
 	});
 
 	req.busboy.on('finish', function(url) {
-		item.pseudo = req.field['pseudo'];  // set the items name (comes from the request)
 		item.tags = req.field['tags'].split(",");
 		item.comment = req.field['comment'];
 		item.save(function(err) {

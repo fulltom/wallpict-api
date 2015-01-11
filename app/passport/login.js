@@ -8,6 +8,9 @@ module.exports = function(passport){
             passReqToCallback : true
         },
         function(req, username, password, done) {
+            // var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+            // var ua = req.get('user-agent');
+            // console.log(ip, ua);
             // check in mongo if a user with username exists or not
             User.findOne({ 'username' :  username },
                 function(err, user) {
@@ -29,6 +32,7 @@ module.exports = function(passport){
                     return done(null, user);
                 }
             );
+
         })
     );
 

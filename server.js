@@ -8,9 +8,12 @@ var app            = express();
 var morgan         = require('morgan');
 var busboy         = require('connect-busboy');
 var moment         = require('moment');
+var passport       = require('passport');
 var expressSession = require('express-session');
+var config = require('./config/cookie.json');
 var cookieParser       = require('cookie-parser');
 var bodyParser = require('body-parser');
+var MongoStore = require('connect-mongo')(expressSession);
 
 var mongoose   = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/wallpict'); // connect to our database
@@ -21,21 +24,25 @@ var itemCtr = require('./app/controllers/item');
 
 // Configuring app
 app.use(morgan('dev')); // log requests to the console
-app.use(busboy());
-app.use(busboy({ immediate: true }));
+app.use(busboy({ immediate: false }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
+app.use(expressSession({
+	saveUninitialized: true,
+    cookie: {  httpOnly: true, maxAge: 1000*60*2 } ,
+    secret: config.secret ,
+    store:new MongoStore({
+            db: 'wallpict',
+            collection: 'session',
+            auto_reconnect:true
+    })
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use("/public", express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/app/views');
 
-// Configuring Passport
-var passport       = require('passport');
-var expressSession = require('express-session');
-// TODO - Why Do we need this key ?
-app.use(expressSession({secret: 'viadeo'}));
-app.use(passport.initialize());
-app.use(passport.session());
 
 var port     = process.env.PORT || 8080; // set our port
 
