@@ -1,9 +1,12 @@
-// Load required packages
 var mongoose     = require('mongoose');
 var Schema       = mongoose.Schema;
 
-module.exports = mongoose.model('User',{
+var UserSchema   = new Schema({
 	username: String,
 	password: String,
-	email: String
+	email: String,
+
 });
+
+mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User');
