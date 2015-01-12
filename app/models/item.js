@@ -7,7 +7,8 @@ var ItemSchema   = new Schema({
 	tags: {type: []},
 	imageURI : {type : String},
 	comment : {type : String},
-	likes : {type : Number}
+	likes : {type : Number},
+	created_by : { type: Number, ref: 'User' }
 
 });
 
