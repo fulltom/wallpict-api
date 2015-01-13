@@ -8,6 +8,7 @@ var ItemSchema   = new Schema({
 	comment : {type : String},
 	likes : {type : Number},
 	_created_by : { type: Schema.Types.ObjectId, ref: 'User' }
+})
 
 mongoose.model('Item', ItemSchema);
 module.exports = mongoose.model('Item');

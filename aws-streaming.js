@@ -91,7 +91,7 @@ var s3UploadService = function(req, next) {
 	req.busboy.on('finish', function(url) {
 		item.tags = req.field['tags'].split(",");
 		item.comment = req.field['comment'];
-		item.populate('_created_by').save(function(err) {
+		item.populate('_created_by', 'username').save(function(err) {
 		   if (err) {
 		      return res.json(500, {
 		        error: 'Cannot save the post'

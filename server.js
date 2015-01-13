@@ -30,7 +30,7 @@ app.use(bodyParser.urlencoded());
 app.use(expressSession({
 	saveUninitialized: true,
     cookie: {  httpOnly: true, maxAge: 1000*60*2 } ,
-    secret: config.secret ,
+    secret: "viadeo",
     store:new MongoStore({
             db: 'wallpict',
             collection: 'session',
