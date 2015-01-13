@@ -17,6 +17,7 @@ exports.getItems = function(req, res) {
 	.find()
 	.populate('_created_by', 'username')
 	.limit(limit)
+	.populate('created_by')
 	.skip(limit * page)
 	.sort({createdAt: 'desc'})
 	.exec(function (err, items) {
