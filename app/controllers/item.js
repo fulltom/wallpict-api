@@ -15,10 +15,12 @@ exports.getItems = function(req, res) {
 	var limit = req.param('limit') || 5
 	Item
 	.find()
+	.populate('_created_by', 'username')
 	.limit(limit)
 	.skip(limit * page)
 	.sort({createdAt: 'desc'})
 	.exec(function (err, items) {
+		 console.log('The creator is %s', items);
 	  Item.count().exec(function (err, count) {
 	    res.json('items', {
 	        items: items

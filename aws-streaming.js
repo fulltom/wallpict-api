@@ -91,14 +91,17 @@ var s3UploadService = function(req, next) {
 	req.busboy.on('finish', function(url) {
 		item.tags = req.field['tags'].split(",");
 		item.comment = req.field['comment'];
-		item.save(function(err) {
-			 if (err) {
-			   res.send(err);
-			 }
-		 	next()
-		});
-	});
+		item.populate('_created_by').save(function(err) {
+		   if (err) {
+		      return res.json(500, {
+		        error: 'Cannot save the post'
+		      });
+		    }
+		    next()
 
+		});
+
+	});
 	// Start the parsing
 	req.pipe(req.busboy);
 };

@@ -4,7 +4,7 @@
 	<img src="<%- d.imageURI %>" alt="" />
 	<div class="info">
 		<div class="head">
-			 <p class="pseudo"><span>By </span><%- d.pseudo %>&nbsp;</p>
+			 <p class="pseudo"><span>By </span><%- d._created_by %>&nbsp;</p>
 			<p class="date"><span>-</span>&nbsp;<%= moment(d.createdAt).fromNow() %></p>
 		</div>
 		<p class="comment"><%- d.comment %></p>
